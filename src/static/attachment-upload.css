@@ -4,10 +4,7 @@
   padding: 0;
   margin: 0;
 }
-.upload-kit .upload-kit-input {
-    width: 150px;
-	height:150px
-}
+
 .upload-kit .upload-kit-input,
 .upload-kit .upload-kit-item {
   position: relative;
@@ -21,6 +18,8 @@
   background-position: center center;
   background-origin: border-box;
   list-style: none;
+  width:150px;
+  height:150px;
 }
 .upload-kit .upload-kit-input .progress,
 .upload-kit .upload-kit-item .progress,

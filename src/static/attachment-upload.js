@@ -147,7 +147,7 @@
                         .append($('<span/>', {"class": "fa fa-trash remove", "data-url": file.deleteUrl}));
                 if (!file.type || file.type.search(/image\/.*/g) !== -1) {
                     item.removeClass('not-image').addClass('image');
-                    item.prepend($('<img/>', {src: file.url, width: 150, height: 150}));
+                    item.prepend($('<img/>', {src: file.url}));
                     item.find('span.type').text('');
                 } else {
                     item.removeClass('image').addClass('not-image');

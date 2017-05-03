@@ -12,6 +12,8 @@ use Yii;
 use yii\base\Action;
 use yii\base\DynamicModel;
 use yii\base\Exception;
+use yii\helpers\FileHelper;
+use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 use yii\web\UploadedFile;
@@ -19,9 +21,9 @@ use yii\web\UploadedFile;
 
 class UploadAction extends Action
 {
-    public $basePath;
+    public $basePath = '@webroot/upload';
 
-    public $baseUrl;
+    public $baseUrl = '@web/upload';
     /**
      * @var string Path to directory where files will be uploaded
      */
@@ -118,9 +120,13 @@ class UploadAction extends Action
             if ($model->hasErrors()) {
                 throw new Exception($model->getFirstError('file'));
             } else {
-                $fileName = $this->path . '/' . $file->name;
-                $filePath = $this->basePath . '/' . $fileName;
-                $file->saveAs($filePath);
+                $fileName = ltrim($this->path . '/' . $file->name, '/');
+                $filePath = ltrim($this->basePath . '/' . $this->path, '/');
+                $fileFullPath = ltrim($this->basePath . '/' . $fileName, '/');
+                if (!is_dir($filePath)) {
+                    FileHelper::createDirectory($filePath);
+                }
+                $file->saveAs($fileFullPath);
                 $result = [
                     'name' => $file->name,
                     'url' => $this->baseUrl . '/' . $fileName,
