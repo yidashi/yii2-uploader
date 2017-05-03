@@ -12,8 +12,6 @@ use Yii;
 use yii\base\Action;
 use yii\base\DynamicModel;
 use yii\base\Exception;
-use common\modules\attachment\models\Attachment;
-use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 use yii\web\UploadedFile;
@@ -21,6 +19,9 @@ use yii\web\UploadedFile;
 
 class UploadAction extends Action
 {
+    public $basePath;
+
+    public $baseUrl;
     /**
      * @var string Path to directory where files will be uploaded
      */
@@ -69,6 +70,8 @@ class UploadAction extends Action
         if ($this->uploadOnlyImage !== true) {
             $this->_validator = 'file';
         }
+        $this->basePath = Yii::getAlias($this->basePath);
+        $this->baseUrl = Yii::getAlias($this->baseUrl);
     }
 
     /**
@@ -115,21 +118,19 @@ class UploadAction extends Action
             if ($model->hasErrors()) {
                 throw new Exception($model->getFirstError('file'));
             } else {
-                $attachment = Attachment::uploadFromPost($this->path, $file);
+                $fileName = $this->path . '/' . $file->name;
+                $filePath = $this->basePath . '/' . $fileName;
+                $file->saveAs($filePath);
                 $result = [
-                    'id' => $attachment->id,
-                    'name' => $attachment->name,
-                    'hash' => $attachment->hash,
-                    'url' => $attachment->url,
-                    'path' => $attachment->path,
-                    'extension' => $attachment->extension,
-                    'type' => $attachment->type,
-                    'size' => $attachment->size,
-                    'title' => $attachment->title,
-                    'deleteUrl' => Url::to(array_merge($this->deleteUrl, ['id' => $attachment->id]))
+                    'name' => $file->name,
+                    'url' => $this->baseUrl . '/' . $fileName,
+                    'path' => $fileName,
+                    'extension' => $file->extension,
+                    'type' => $file->type,
+                    'size' => $file->size
                 ];
                 if ($this->uploadOnlyImage !== true) {
-                    $result['filename'] = $attachment->name;
+                    $result['filename'] = $file->name;
                 }
             }
             if ($this->itemCallback instanceof \Closure) {
