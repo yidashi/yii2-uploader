@@ -1,0 +1,20 @@
+{
+    "name": "yidashi/yii2-uploader",
+    "description": "yii2-uploader",
+    "type": "library",
+    "authors": [
+        {
+            "name": "yidashi",
+            "email": "liujuntaor@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "bower-asset/blueimp-file-upload" : "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "yidashi\\uploader\\": "src"
+        }
+    }
+}
