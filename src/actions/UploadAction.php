@@ -120,9 +120,9 @@ class UploadAction extends Action
             if ($model->hasErrors()) {
                 throw new Exception($model->getFirstError('file'));
             } else {
-                $fileName = ltrim($this->path . '/' . $file->name, '/');
-                $filePath = ltrim($this->basePath . '/' . $this->path, '/');
-                $fileFullPath = ltrim($this->basePath . '/' . $fileName, '/');
+                $fileName = ($this->path ? $this->path . '/' : '') . $file->name;
+                $filePath = $this->basePath . ($this->path ? '/' . $this->path : '');
+                $fileFullPath = $this->basePath . '/' . $fileName;
                 if (!is_dir($filePath)) {
                     FileHelper::createDirectory($filePath);
                 }
